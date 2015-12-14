@@ -25,11 +25,15 @@ options = {
   address: Config.smtp_host,
   port: Config.smtp_port,
   domain: Config.smtp_domain,
-  # user_name: Config.smtp_username,
-  # password: Config.smtp_password,
-  # authentication: Config.smtp_auth,
   enable_starttls_auto: true
 }
+
+if Config.smtp_auth != 'none'
+  options.merge(user_name: Config.smtp_username,
+                password: Config.smtp_password,
+                authentication: Config.smtp_auth
+               )
+end
 
 Mail.defaults do
   delivery_method :smtp, options
@@ -52,4 +56,3 @@ mail_list('email') do |address|
 
   mail.deliver
 end
-
