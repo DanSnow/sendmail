@@ -1,0 +1,7 @@
+---
+smtp_host: example.com # smtp host
+smtp_port: "25" # smtp port require string
+smtp_username: user # auth username (optional)
+smtp_password: pass # plain password (optional)
+smtp_domain: example.com # computer domain
+smtp_auth: plain # auth method use none if not need
