@@ -63,3 +63,4 @@ build/
 fixture
 *.yml
 !*.example.yml
+*.log
