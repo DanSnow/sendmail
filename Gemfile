@@ -5,6 +5,7 @@ gem 'mail'
 gem 'nokogiri'
 gem 'figaro'
 gem 'logging'
+gem 'ruby-progressbar'
 
 group :development do
   gem 'guard'
