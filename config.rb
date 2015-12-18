@@ -9,9 +9,11 @@ Figaro.require_keys(
   'smtp_host',
   'smtp_port',
   'smtp_domain',
-  'smtp_username',
-  'smtp_password',
-  'smtp_auth'
+  'smtp_auth',
+  'sender',
+  'email_list',
+  'email_content',
+  'log'
 )
 
 Config = Figaro.env
