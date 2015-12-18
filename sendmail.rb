@@ -4,28 +4,19 @@
 require 'bundler/setup'
 require 'mail'
 require 'logging'
+require 'ruby-progressbar'
 
 require_relative 'config'
 require_relative 'logger'
+require_relative 'mail_address'
 require_relative 'mail_content'
 
 logger = Logging.logger[APP_LOGGER]
 mail_content = MailContent.new(Config.email_content)
-
-def mail_list(filename)
-  num = 0
-  File.read(filename).each_line do |address|
-    num = (num + 1) % 10
-    if num.zero?
-      sleep 3
-    end
-    yield address
-  end
-end
+mail_address = MailAddress.new(Config.email_list)
 
 def with_retry
   retry_time = 0
-  logger = Logging.logger[APP_LOGGER]
 
   begin
     yield
@@ -41,8 +32,8 @@ def with_retry
   end
 
   if retry_time == 3 # When too many error, give more sleep
-    logger.warn 'Too many retry'
     sleep 5
+    fail %q(Too many retry)
   end
 end
 
@@ -66,22 +57,37 @@ Mail.defaults do
   delivery_method :smtp, options
 end
 
-mail_list(Config.email_list) do |address|
-  with_retry do
-    mail = Mail.new do
-      to address
-      from Config.sender
-      reply_to Config.sender
-      subject mail_content.title
+total_mail = mail_address.size
+progressbar = ProgressBar.create total: total_mail, format: '|%B|%c/%C %E'
+
+mail_address.each do |address|
+  begin
+    with_retry do
+      mail = Mail.new do
+        to address
+        from Config.sender
+        reply_to Config.sender
+        subject mail_content.title
+      end
+
+      mail_content.attach_image(mail)
+
+      mail.html_part = Mail::Part.new do
+        content_type 'text/html; charset=UTF-8'
+        body mail_content.to_s
+      end
+
+      mail.deliver
     end
-
-    mail_content.attach_image(mail)
-
-    mail.html_part = Mail::Part.new do
-      content_type 'text/html; charset=UTF-8'
-      body mail_content.to_s
-    end
-
-    mail.deliver
+  rescue RuntimeError => e
+    logger.error e
+    mail_address.add_fail address
   end
+  progressbar.increment
+end
+
+progressbar.finish
+
+unless mail_address.fails.empty?
+  logger.warn "Can't send to #{mail_address.fails.join("\n")}"
 end
