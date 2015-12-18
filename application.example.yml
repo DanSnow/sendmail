@@ -5,3 +5,6 @@ smtp_username: user # auth username (optional)
 smtp_password: pass # plain password (optional)
 smtp_domain: example.com # computer domain
 smtp_auth: plain # auth method use none if not need
+email_list: list # email list
+email_content: foo.html # email content, must be html
+log: warn # log level, may be debug, info, warn, error, fatal
