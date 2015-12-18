@@ -4,6 +4,7 @@ source "https://rubygems.org"
 gem 'mail'
 gem 'nokogiri'
 gem 'figaro'
+gem 'logging'
 
 group :development do
   gem 'guard'
