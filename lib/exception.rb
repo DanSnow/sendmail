@@ -5,7 +5,7 @@ require_relative 'logger'
 
 module Handler
   module Retry
-    include ::Logger
+    include ::Log
 
     def with_retry
       retry_time = 0
