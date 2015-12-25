@@ -13,3 +13,9 @@ logger.level = Config.log.to_sym
 logger.add_appenders Logging.appenders.stdout, Logging.appenders.file('mail.log')
 
 logger.info 'Start logger'
+
+module Logger
+  def logger
+    @logger ||= Logging.logger[APP_LOGGER]
+  end
+end
