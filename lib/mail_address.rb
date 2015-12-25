@@ -6,14 +6,17 @@ require 'forwardable'
 class MailAddress
   extend Forwardable
 
-  attr_reader :address, :filename, :fails
+  attr_reader :address, :filename, :fails, :limit
 
-  def initialize(filename)
+  def initialize(filename, limit = nil)
     @filename = filename
     @fails = []
+    @limit = limit
     File.open(filename, 'r') do |f|
       @address = f.readlines.map(&:chomp)
     end
+
+    @address.take limit if limit
   end
 
   def each
