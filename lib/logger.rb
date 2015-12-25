@@ -14,7 +14,7 @@ logger.add_appenders Logging.appenders.stdout, Logging.appenders.file('mail.log'
 
 logger.info 'Start logger'
 
-module Logger
+module Log
   def logger
     @logger ||= Logging.logger[APP_LOGGER]
   end
