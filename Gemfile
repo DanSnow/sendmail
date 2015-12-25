@@ -6,6 +6,7 @@ gem 'nokogiri'
 gem 'figaro'
 gem 'logging'
 gem 'ruby-progressbar'
+gem 'gli'
 
 group :development do
   gem 'guard'
