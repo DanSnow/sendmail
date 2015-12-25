@@ -16,7 +16,7 @@ class MailAddress
       @address = f.readlines.map(&:chomp)
     end
 
-    @address.take! limit if limit
+    @address = @address[0..limit] if limit
   end
 
   def each
