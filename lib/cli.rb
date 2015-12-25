@@ -10,7 +10,7 @@ module CLI
 
   command :run do |cmd|
     cmd.action do |_global_opts, _opts, args|
-      sendmail = ::Sendmail.new(args.fetch(0, nil))
+      sendmail = ::Sendmail.new(args.map(&:to_i).fetch(0, nil))
 
       sendmail.run
     end
